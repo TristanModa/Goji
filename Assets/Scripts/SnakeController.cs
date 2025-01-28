@@ -12,9 +12,11 @@ namespace Goji
 		private int SnakeMovementTimer { get; set; }
 		private int SnakeLength { get; set; }
 
-		private Vector2Int HeadPosition { get; set; }
 		private List<Vector2Int> SegmentPositions { get; set; }
 		private List<Transform> Segments { get; set; }
+		private Vector2Int HeadPosition => SegmentPositions[0];
+
+		private RectInt MapRect => new RectInt(Vector2Int.zero - mapSize / 2, mapSize);
 
 		public bool IsDead { get; private set; }
 
@@ -24,6 +26,9 @@ namespace Goji
 		#region Fields
 		[SerializeField]
 		private int defaultSnakeLength;
+
+		[Space(20), SerializeField]
+		Vector2Int mapSize;
 
 		[Space(20), SerializeField]
 		int snakeMoveRate;
@@ -51,6 +56,7 @@ namespace Goji
 				segment.name = $"Segment {i}";
 				segment.SetParent(this.transform);
 				Segments.Add(segment);
+				SegmentPositions.Add(new Vector2Int(0, 0));
 			}
 
 			// Set the default movement direction
@@ -100,13 +106,24 @@ namespace Goji
 		private void PerformMovement()
 		{
 			// Move the head of the snake
-			HeadPosition += DesiredMoveDirection;
+			Vector2Int newHeadPosition = HeadPosition;
+			newHeadPosition += DesiredMoveDirection;
+
+			// Wrap the snake's head to the opposite side of the screen if it has left the screen bounds
+			if (newHeadPosition.x < MapRect.xMin)
+				newHeadPosition.x = MapRect.xMax;
+			if (newHeadPosition.x > MapRect.xMax)
+				newHeadPosition.x = MapRect.xMin;
+			if (newHeadPosition.y < MapRect.yMin)
+				newHeadPosition.y = MapRect.yMax;
+			if (newHeadPosition.y > MapRect.yMax)
+				newHeadPosition.y = MapRect.yMin;
 
 			// Set the previous move direction for next frame
 			PreviousMoveDirection = DesiredMoveDirection;
 
 			// Add the head position to the beginning of the segment positions list
-			SegmentPositions.Insert(0, HeadPosition);
+			SegmentPositions.Insert(0, newHeadPosition);
 
 			// Remove the final position from the list if the list is longer than the snake's length
 			if (SegmentPositions.Count > SnakeLength)
@@ -132,16 +149,12 @@ namespace Goji
 				if (HeadPosition == SegmentPositions[i])
 					IsDead = true;
 			}
-
-			// Check if the head has left the bounds of the map
-			if (HeadPosition.x > 22 || HeadPosition.x < -22 || HeadPosition.y > 12 || HeadPosition.y < -12)
-				IsDead = true;
 		}
 
 		private void UpdateSegments()
 		{
-			if (IsDead)
-				return;
+			//if (IsDead)
+				//return;
 
 			// Add any missing segments
 			while (Segments.Count < SnakeLength)
@@ -166,9 +179,16 @@ namespace Goji
 			Vector2Int randomPosition = Vector2Int.zero;
 			bool validPosition = false;
 
+			// Failsafe for when the snake takes up the entire board
+			if (SnakeLength >= mapSize.x * mapSize.y)
+				return Vector2Int.zero;
+
 			while (!validPosition)
 			{
-				randomPosition = new Vector2Int(Random.Range(-22, 22), Random.Range(-12, 12));
+				randomPosition = 
+					new Vector2Int(
+						Random.Range(MapRect.xMin + 1, MapRect.xMax - 1),
+						Random.Range(MapRect.yMin + 1, MapRect.yMax - 1));
 				validPosition = !SegmentPositions.Contains(randomPosition);
 			}
 
