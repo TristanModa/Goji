@@ -66,13 +66,13 @@ namespace Goji.Legacy
 		void Update()
 		{
 			// Update the desired movement direction
-			if (Input.GetKeyDown(KeyCode.W))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
 				DesiredMoveDirection = Vector2Int.up;
-			if (Input.GetKeyDown(KeyCode.S))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
 				DesiredMoveDirection = Vector2Int.down;
-			if (Input.GetKeyDown(KeyCode.D))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.D))
 				DesiredMoveDirection = Vector2Int.right;
-			if (Input.GetKeyDown(KeyCode.A))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
 
 			// Ignore inputs that would cause the snake to go backwards

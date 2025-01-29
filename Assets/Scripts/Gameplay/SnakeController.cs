@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Goji
+namespace Goji.Gameplay
 {
 	public class SnakeController : MonoBehaviour
 	{
@@ -16,7 +16,7 @@ namespace Goji
 		private List<Transform> Segments { get; set; }
 		private Vector2Int HeadPosition => SegmentPositions[0];
 
-		private RectInt MapRect => new RectInt(Vector2Int.zero - mapSize / 2, mapSize);
+		private RectInt MapBounds => GameManager.Instance.MapBounds;
 
 		public bool IsDead { get; private set; }
 
@@ -40,7 +40,7 @@ namespace Goji
 		#endregion
 
 		#region Methods
-		void Start()
+		private void Start()
 		{
 			// Set the initial length of the snake
 			SnakeLength = defaultSnakeLength;
@@ -69,16 +69,16 @@ namespace Goji
 			Fruit.position = (Vector3Int)GetValidFruitLocation();
 		}
 
-		void Update()
+		private void Update()
 		{
 			// Update the desired movement direction
-			if (Input.GetKeyDown(KeyCode.W))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
 				DesiredMoveDirection = Vector2Int.up;
-			if (Input.GetKeyDown(KeyCode.S))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
 				DesiredMoveDirection = Vector2Int.down;
-			if (Input.GetKeyDown(KeyCode.D))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.D))
 				DesiredMoveDirection = Vector2Int.right;
-			if (Input.GetKeyDown(KeyCode.A))
+			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
 
 			// Ignore inputs that would cause the snake to go backwards
@@ -86,7 +86,7 @@ namespace Goji
 				DesiredMoveDirection = PreviousMoveDirection;
 		}
 
-		void FixedUpdate()
+		private void FixedUpdate()
 		{
 			// Move the snake if the timer has elapsed
 			if (SnakeMovementTimer > snakeMoveRate && !IsDead)
@@ -110,14 +110,14 @@ namespace Goji
 			newHeadPosition += DesiredMoveDirection;
 
 			// Wrap the snake's head to the opposite side of the screen if it has left the screen bounds
-			if (newHeadPosition.x < MapRect.xMin)
-				newHeadPosition.x = MapRect.xMax;
-			if (newHeadPosition.x > MapRect.xMax)
-				newHeadPosition.x = MapRect.xMin;
-			if (newHeadPosition.y < MapRect.yMin)
-				newHeadPosition.y = MapRect.yMax;
-			if (newHeadPosition.y > MapRect.yMax)
-				newHeadPosition.y = MapRect.yMin;
+			if (newHeadPosition.x < MapBounds.xMin)
+				newHeadPosition.x = MapBounds.xMax;
+			if (newHeadPosition.x > MapBounds.xMax)
+				newHeadPosition.x = MapBounds.xMin;
+			if (newHeadPosition.y < MapBounds.yMin)
+				newHeadPosition.y = MapBounds.yMax;
+			if (newHeadPosition.y > MapBounds.yMax)
+				newHeadPosition.y = MapBounds.yMin;
 
 			// Set the previous move direction for next frame
 			PreviousMoveDirection = DesiredMoveDirection;
@@ -180,15 +180,15 @@ namespace Goji
 			bool validPosition = false;
 
 			// Failsafe for when the snake takes up the entire board
-			if (SnakeLength >= mapSize.x * mapSize.y)
+			if (SnakeLength >= MapBounds.width * MapBounds.height)
 				return Vector2Int.zero;
 
 			while (!validPosition)
 			{
 				randomPosition = 
 					new Vector2Int(
-						Random.Range(MapRect.xMin + 1, MapRect.xMax - 1),
-						Random.Range(MapRect.yMin + 1, MapRect.yMax - 1));
+						Random.Range(MapBounds.xMin + 1, MapBounds.xMax - 1),
+						Random.Range(MapBounds.yMin + 1, MapBounds.yMax - 1));
 				validPosition = !SegmentPositions.Contains(randomPosition);
 			}
 
