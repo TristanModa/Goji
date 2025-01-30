@@ -134,8 +134,6 @@ namespace Goji.Gameplay
 			// Apply gravity
 			verticalVelocity -= (gravityScale * Time.fixedDeltaTime);
 
-			Debug.Log(transform.position.y);
-
 			// Return the result
 			return verticalVelocity;
 		}
