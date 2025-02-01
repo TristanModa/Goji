@@ -21,6 +21,9 @@ namespace Goji
 			if (snake.IsDead)
 				gameOverText.SetActive(true);
 
+			if (Input.GetKeyDown(KeyCode.Escape))
+				SceneManager.LoadScene("StartScreenScene");
+
 			// Reload the scene if the player presses R
 			if (snake.IsDead && Input.GetKeyDown(KeyCode.R))
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
