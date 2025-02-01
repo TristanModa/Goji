@@ -21,14 +21,12 @@ namespace Goji.Gameplay
 		public bool IsDead { get; private set; }
 
 		private Transform Fruit { get; set; }
+		private Vector2Int FruitPosition { get; set; }
 		#endregion
 
 		#region Fields
 		[SerializeField]
 		private int defaultSnakeLength;
-
-		[Space(20), SerializeField]
-		Vector2Int mapSize;
 
 		[Space(20), SerializeField]
 		int snakeMoveRate;
@@ -66,7 +64,8 @@ namespace Goji.Gameplay
 			// Create the fruit and initialize it to a random position
 			Fruit = Instantiate(fruitPrefab);
 			Fruit.name = "Fruit";
-			Fruit.position = (Vector3Int)GetValidFruitLocation();
+			FruitPosition = GetValidFruitLocation();
+			Fruit.position = (Vector3Int)FruitPosition;
 		}
 
 		private void Update()
@@ -84,6 +83,8 @@ namespace Goji.Gameplay
 			// Ignore inputs that would cause the snake to go backwards
 			if (DesiredMoveDirection == PreviousMoveDirection * -1)
 				DesiredMoveDirection = PreviousMoveDirection;
+
+			Fruit.position = Vector2.Lerp(Fruit.position, FruitPosition, 0.25f);
 		}
 
 		private void FixedUpdate()
@@ -133,14 +134,14 @@ namespace Goji.Gameplay
 		private void CheckCollisions()
 		{
 			// Check if the head position is the same as the fruit
-			Vector2Int fruitPosition = new Vector2Int((int)Fruit.position.x, (int)Fruit.position.y);
+			Vector2Int fruitPosition = FruitPosition;
 			if (HeadPosition == fruitPosition)
 			{
 				// Increase the snake length
 				SnakeLength++;
 
 				// Move the fruit
-				Fruit.position = (Vector3Int)GetValidFruitLocation();
+				FruitPosition = GetValidFruitLocation();
 			}
 
 			// Check if the head position is the same as any non-head segments

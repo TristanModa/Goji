@@ -181,7 +181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &512197849
 Rigidbody2D:
   serializedVersion: 5
@@ -837,7 +837,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &958805993
 Transform:
   m_ObjectHideFlags: 0
@@ -865,11 +865,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846b8562483b49c4483d2d963aee7f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSnakeLength: 64
-  mapSize: {x: 0, y: 26}
-  snakeMoveRate: 1
+  defaultSnakeLength: 4
+  snakeMoveRate: 8
   snakeBodySegmentPrefab: {fileID: 6240308656206738667, guid: deb0b55f40006ac4d9b0a76fcb54ca09, type: 3}
-  fruitPrefab: {fileID: 2775292247723223736, guid: 3802aa5e10ceb294fbbf1c28616e67f4, type: 3}
+  fruitPrefab: {fileID: 942621649340418357, guid: 978a93090bcf6614bada0ac283ea5020, type: 3}
 --- !u!66 &958805995
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -1120,7 +1119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &2134544793
 Rigidbody2D:
   serializedVersion: 5
