@@ -2,7 +2,7 @@ using Goji.Input;
 using System;
 using UnityEngine;
 
-namespace Goji.Gameplay 
+namespace Goji.Gameplay.Player
 {
 	public class PlayerController : MonoBehaviour
 	{
@@ -90,6 +90,10 @@ namespace Goji.Gameplay
 		/// Whether the player can jump while airborne
 		/// </summary>
 		private bool CoyoteTimeActive => _coyoteTimeStartFrame + coyoteTimeFrames >= FrameCount;
+		#endregion
+
+		#region Events
+		public event Action OnPlayerJump;
 		#endregion
 
 		#region Settings
@@ -225,6 +229,7 @@ namespace Goji.Gameplay
 			if ((PlayerInput.Jump.Pressed || JumpBuffered) && CanJump)
 			{
 				IsJumping = true;
+				OnPlayerJump?.Invoke();
 				verticalVelocity = Mathf.Sqrt(2 * CurrentGravityScale * jumpHeight);
 			}
 			
