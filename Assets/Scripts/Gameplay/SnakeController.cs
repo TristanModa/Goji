@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Goji.Gameplay
@@ -71,6 +72,7 @@ namespace Goji.Gameplay
 		private void Update()
 		{
 			// Update the desired movement direction
+			/* Debugging Input
 			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
 				DesiredMoveDirection = Vector2Int.up;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
@@ -79,18 +81,23 @@ namespace Goji.Gameplay
 				DesiredMoveDirection = Vector2Int.right;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
-
+			*/
+			DesiredMoveDirection = SnakeBotMovement();
 			// Ignore inputs that would cause the snake to go backwards
+			
 			if (DesiredMoveDirection == PreviousMoveDirection * -1)
 				DesiredMoveDirection = PreviousMoveDirection;
 
 			Fruit.position = Vector2.Lerp(Fruit.position, FruitPosition, 0.25f);
+			
 		}
 
 		private void FixedUpdate()
 		{
-			// Move the snake if the timer has elapsed
-			if (SnakeMovementTimer > snakeMoveRate && !IsDead)
+			
+
+            // Move the snake if the timer has elapsed
+            if (SnakeMovementTimer > snakeMoveRate && !IsDead)
 			{
 				PerformMovement();
 				CheckCollisions();
@@ -194,6 +201,46 @@ namespace Goji.Gameplay
 			}
 
 			return randomPosition;
+		}
+
+		private Vector2Int SnakeBotMovement() 
+		{
+			float dx = Fruit.position.x - HeadPosition.x;
+			float dy = Fruit.position.y - HeadPosition.y;
+
+            if (Mathf.Abs(dx) > Mathf.Abs(dy))
+			{
+				if (dx > 0)
+				{
+					return Vector2Int.right;
+				}
+				else if (dx < 0)
+				{
+					return Vector2Int.left;
+				}
+				else
+				{
+					return Vector2Int.zero;
+				}
+			}
+			else if (Mathf.Abs(dy) > Mathf.Abs(dx))
+			{
+				if (dy > 0)
+				{
+					return Vector2Int.up;
+				}
+				else if (dy < 0)
+				{
+					return Vector2Int.down;
+				}
+				else
+				{
+					return Vector2Int.zero;
+				}
+			}
+			else { 
+				return Vector2Int.zero;
+			}
 		}
 		#endregion
 	}
