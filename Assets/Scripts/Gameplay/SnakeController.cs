@@ -89,6 +89,9 @@ namespace Goji.Gameplay
 
 		private void FixedUpdate()
 		{
+			if (IsDead)
+				return;
+
 			// Move the snake if the timer has elapsed
 			if (SnakeMovementTimer > snakeMoveRate && !IsDead)
 			{
@@ -151,15 +154,17 @@ namespace Goji.Gameplay
 			for (int i = 1; i < SegmentPositions.Count; i++)
 			{
 				if (HeadPosition == SegmentPositions[i])
+				{
 					IsDead = true;
-					//AudioManager.PlaySFX("Death");
+					AudioManager.PlaySFX("Death");
+				}
 			}
 		}
 
 		private void UpdateSegments()
 		{
-			//if (IsDead)
-				//return;
+			if (IsDead)
+				return;
 
 			// Add any missing segments
 			while (Segments.Count < SnakeLength)
