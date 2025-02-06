@@ -142,6 +142,9 @@ namespace Goji.Gameplay
 
 				// Move the fruit
 				FruitPosition = GetValidFruitLocation();
+
+				//Play Sound Effect
+				AudioManager.PlaySFX("Collect");
 			}
 
 			// Check if the head position is the same as any non-head segments
@@ -149,6 +152,7 @@ namespace Goji.Gameplay
 			{
 				if (HeadPosition == SegmentPositions[i])
 					IsDead = true;
+					//AudioManager.PlaySFX("Death");
 			}
 		}
 
