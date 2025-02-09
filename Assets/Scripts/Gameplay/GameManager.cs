@@ -13,7 +13,10 @@ namespace Goji.Gameplay
 			{
 				// Avoid setting the singleton if it is not null
 				if (_instance != null)
+				{
+					Destroy(value);
 					return;
+				}
 
 				_instance = value;
 			}

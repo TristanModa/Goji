@@ -146,7 +146,7 @@ namespace Goji.Gameplay
 				// Move the fruit
 				FruitPosition = GetValidFruitLocation();
 
-				//Play Sound Effect
+				// Play Sound Effect
 				AudioManager.PlaySFX("Collect");
 			}
 

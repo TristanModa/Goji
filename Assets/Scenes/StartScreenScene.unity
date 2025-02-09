@@ -1632,12 +1632,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8321ecaf16cf7428aeadc047c7ef95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundNames:
-  - Death
-  - Collect
-  soundClips:
-  - {fileID: 8300000, guid: 4611929be4a9c6144a49c1bec3fe09e9, type: 3}
+  sfxClips:
   - {fileID: 8300000, guid: 99cb953ff56625545a7cac0fe72ac556, type: 3}
+  - {fileID: 8300000, guid: 4611929be4a9c6144a49c1bec3fe09e9, type: 3}
 --- !u!82 &1488551032
 AudioSource:
   m_ObjectHideFlags: 0
