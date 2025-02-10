@@ -2249,6 +2249,8 @@ MonoBehaviour:
     m_Bits: 64
   groundCheckOffset: {x: 0, y: -0.5}
   groundCheckSize: {x: 0.95, y: 0.1}
+  cornerNudgeCheckLength: 0.7
+  cornerNudgeCheckOffset: 0.5
   jumpBufferFrames: 8
   coyoteTimeFrames: 8
 --- !u!1660057539 &9223372036854775807

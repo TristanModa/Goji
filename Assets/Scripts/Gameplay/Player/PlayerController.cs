@@ -117,10 +117,16 @@ namespace Goji.Gameplay.Player
 		[Header("Collision")]
 		[SerializeField]
 		private LayerMask groundLayer;
-		[SerializeField]
+
+		[Space(20), SerializeField]
 		private Vector2 groundCheckOffset;
 		[SerializeField]
 		private Vector2 groundCheckSize;
+
+		[Space(20), SerializeField]
+		private float cornerNudgeCheckLength;
+		[SerializeField]
+		private float cornerNudgeCheckOffset;
 
 		[Header("Player Assist")]
 		[SerializeField]
@@ -157,7 +163,8 @@ namespace Goji.Gameplay.Player
 			PlayerInput.UpdateButtonStates();
 
 			UpdateTimers();
-			UpdateVelocity();	
+			UpdateVelocity();
+			PerformCornerAdjustments();
 		}
 
 		/// <summary>
@@ -237,11 +244,75 @@ namespace Goji.Gameplay.Player
 			return verticalVelocity;
 		}
 
+		/// <summary>
+		/// Adjusts the player's position if jumping into the corner of a platform
+		/// </summary>
+		private void PerformCornerAdjustments()
+		{
+			// Return if the player's velocity is zero
+			if (Velocity.y <= 0)
+				return;
+
+			// Perform ceiling corner checks
+			bool ceilingCenterCheck = 
+				Physics2D.Raycast(
+					transform.position, 
+					Vector2.up, 
+					cornerNudgeCheckLength, 
+					groundLayer);
+			bool ceilingLeftCheck = 
+				Physics2D.Raycast(
+					transform.position + Vector3.left * cornerNudgeCheckOffset, 
+					Vector2.up, 
+					cornerNudgeCheckLength, 
+					groundLayer);
+			bool ceilingRightCheck =
+				Physics2D.Raycast(
+					transform.position + Vector3.right * cornerNudgeCheckOffset,
+					Vector2.up,
+					cornerNudgeCheckLength,
+					groundLayer);
+
+			// Get the direction to adjust the player
+			int direction = (ceilingLeftCheck) ? -1 : 1;
+
+			// Check if a correction is required
+			bool correctionRequired =
+				!ceilingCenterCheck && (ceilingLeftCheck ^ ceilingRightCheck) &&
+				Mathf.Sign(direction) != Mathf.Sign(Velocity.x);
+
+			// Return if the correction is unneeded
+			if (!correctionRequired)
+				return;
+
+			// Get the distance to adjust the player by
+			float distanceFromCorner = Physics2D.Raycast(
+				transform.position + cornerNudgeCheckLength * Vector3.up,
+				Vector2.right * direction,
+				cornerNudgeCheckOffset,
+				groundLayer).distance;
+			float distanceToMove = -(cornerNudgeCheckOffset - distanceFromCorner + 0.01f);
+
+			// Update the player's position
+			transform.position += distanceToMove * direction * Vector3.right;
+		}
+
 		private void OnDrawGizmos()
 		{
 			#region Ground Check
 			Gizmos.color = IsGrounded ? Color.green : Color.white;
 			Gizmos.DrawCube(transform.position + (Vector3)groundCheckOffset, groundCheckSize);
+			#endregion
+
+			#region Corner Nudge Check
+			Gizmos.color = Color.red;
+			Gizmos.DrawLine(transform.position, transform.position + Vector3.up * cornerNudgeCheckLength);
+			Gizmos.DrawLine(
+				transform.position + Vector3.right * cornerNudgeCheckOffset, 
+				transform.position + Vector3.right * cornerNudgeCheckOffset + Vector3.up * cornerNudgeCheckLength);
+			Gizmos.DrawLine(
+				transform.position + Vector3.left * cornerNudgeCheckOffset,
+				transform.position + Vector3.left * cornerNudgeCheckOffset + Vector3.up * cornerNudgeCheckLength);
 			#endregion
 		}
 		#endregion
