@@ -205,42 +205,30 @@ namespace Goji.Gameplay
 
 		private Vector2Int SnakeBotMovement() 
 		{
-			float dx = Fruit.position.x - HeadPosition.x;
-			float dy = Fruit.position.y - HeadPosition.y;
+			Vector2Int[] directions = { Vector2Int.down, Vector2Int.up, Vector2Int.left, Vector2Int.right };
 
-            if (Mathf.Abs(dx) > Mathf.Abs(dy))
+			Vector2Int bestMove = Vector2Int.zero;
+			float shortestDistance = float.MaxValue;
+
+			foreach (Vector2Int dir in directions) 
 			{
-				if (dx > 0)
+				Vector2Int newPos = HeadPosition + dir;
+
+				if (SegmentPositions.Contains(newPos))
+					continue;
+
+				float distance = Vector2Int.Distance(newPos, FruitPosition);
+
+				if (distance < shortestDistance) 
 				{
-					return Vector2Int.right;
+					shortestDistance = distance;
+					bestMove = dir;
 				}
-				else if (dx < 0)
-				{
-					return Vector2Int.left;
-				}
-				else
-				{
-					return Vector2Int.zero;
-				}
+			
 			}
-			else if (Mathf.Abs(dy) > Mathf.Abs(dx))
-			{
-				if (dy > 0)
-				{
-					return Vector2Int.up;
-				}
-				else if (dy < 0)
-				{
-					return Vector2Int.down;
-				}
-				else
-				{
-					return Vector2Int.zero;
-				}
-			}
-			else { 
-				return Vector2Int.zero;
-			}
+
+
+			return bestMove;
 		}
 		#endregion
 	}
