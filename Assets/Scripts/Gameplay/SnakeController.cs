@@ -8,14 +8,22 @@ namespace Goji.Gameplay
 	{
 		#region Properties
 		private Vector2Int DesiredMoveDirection { get; set; }
-		private Vector2Int PreviousMoveDirection { get; set; }
 
 		private int SnakeMovementTimer { get; set; }
 		private int SnakeLength { get; set; }
 
+		/// <summary>
+		/// The snake's speed in tiles per second
+		/// </summary>
+		private float SnakeSpeed => 1 / Time.fixedDeltaTime / (snakeMoveRate + 1);
+
 		private List<Vector2Int> SegmentPositions { get; set; }
 		private List<Transform> Segments { get; set; }
 		private Vector2Int HeadPosition => SegmentPositions[0];
+		private Vector2Int PreviousTailPosition { get; set; }
+
+		private Transform FrontSmoothingSegment { get; set; }
+		private Transform BackSmoothingSegment { get; set; }
 
 		private RectInt MapBounds => GameManager.Instance.MapBounds;
 
@@ -58,9 +66,16 @@ namespace Goji.Gameplay
 				SegmentPositions.Add(new Vector2Int(0, 0));
 			}
 
+			// Create smoothing segments
+			FrontSmoothingSegment = Instantiate(snakeBodySegmentPrefab);
+			FrontSmoothingSegment.name = "Front Smoothing Segment";
+			FrontSmoothingSegment.parent = this.transform;
+			BackSmoothingSegment = Instantiate(snakeBodySegmentPrefab);
+			BackSmoothingSegment.name = "Back Smoothing Segment";
+			BackSmoothingSegment.parent = this.transform;
+
 			// Set the default movement direction
 			DesiredMoveDirection = Vector2Int.right;
-			PreviousMoveDirection = Vector2Int.zero;
 
 			// Create the fruit and initialize it to a random position
 			Fruit = Instantiate(fruitPrefab);
@@ -82,14 +97,22 @@ namespace Goji.Gameplay
 			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
 			*/
-			DesiredMoveDirection = SnakeBotMovement();
-			// Ignore inputs that would cause the snake to go backwards
-			
-			if (DesiredMoveDirection == PreviousMoveDirection * -1)
-				DesiredMoveDirection = PreviousMoveDirection;
 
+			// Update smoothing segment positions
+			FrontSmoothingSegment.position = 
+				Vector2.MoveTowards(
+					FrontSmoothingSegment.position, 
+					HeadPosition + DesiredMoveDirection, 
+					SnakeSpeed * Time.deltaTime);
+
+			BackSmoothingSegment.position =
+				Vector2.MoveTowards(
+					BackSmoothingSegment.position,
+					SegmentPositions[SegmentPositions.Count - 1],
+					SnakeSpeed * Time.deltaTime);
+
+			// Update the fruit's position
 			Fruit.position = Vector2.Lerp(Fruit.position, FruitPosition, 0.25f);
-			
 		}
 
 		private void FixedUpdate()
@@ -106,6 +129,9 @@ namespace Goji.Gameplay
 
 				// Reset movement timer
 				SnakeMovementTimer = 0;
+
+				// Determine next movement direction
+				DesiredMoveDirection = GetNextMovementDirection();
 			}
 
 			// Increment the snake movement timer
@@ -128,11 +154,11 @@ namespace Goji.Gameplay
 			if (newHeadPosition.y > MapBounds.yMax)
 				newHeadPosition.y = MapBounds.yMin;
 
-			// Set the previous move direction for next frame
-			PreviousMoveDirection = DesiredMoveDirection;
-
 			// Add the head position to the beginning of the segment positions list
 			SegmentPositions.Insert(0, newHeadPosition);
+
+			// Get the previous tail position
+			PreviousTailPosition = SegmentPositions[SegmentPositions.Count - 1];
 
 			// Remove the final position from the list if the list is longer than the snake's length
 			if (SegmentPositions.Count > SnakeLength)
@@ -187,6 +213,10 @@ namespace Goji.Gameplay
 				int index = i < SegmentPositions.Count ? i : SegmentPositions.Count - 1;
 				Segments[index].position = (Vector3Int)SegmentPositions[index];
 			}
+
+			// Set smoothing segment positions
+			FrontSmoothingSegment.position = (Vector3Int)HeadPosition;
+			BackSmoothingSegment.position = (Vector3Int)PreviousTailPosition;
 		}
 
 		private Vector2Int GetValidFruitLocation()
@@ -210,7 +240,7 @@ namespace Goji.Gameplay
 			return randomPosition;
 		}
 
-		private Vector2Int SnakeBotMovement() 
+		private Vector2Int GetNextMovementDirection() 
 		{
 			Vector2Int[] directions = { Vector2Int.down, Vector2Int.up, Vector2Int.left, Vector2Int.right };
 
@@ -231,9 +261,7 @@ namespace Goji.Gameplay
 					shortestDistance = distance;
 					bestMove = dir;
 				}
-			
 			}
-
 
 			return bestMove;
 		}

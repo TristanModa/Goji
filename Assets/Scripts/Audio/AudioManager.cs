@@ -33,6 +33,9 @@ public class AudioManager : MonoBehaviour
 
 	#region Settings
 	[SerializeField]
+	private bool mute;
+
+	[SerializeField]
 	AudioClip musicClip;
 
 	[SerializeField]
@@ -69,6 +72,10 @@ public class AudioManager : MonoBehaviour
 		MusicSource = musicSourceObject.AddComponent<AudioSource>();
 		MusicSource.loop = true;
 		MusicSource.clip = musicClip;
+
+		if (mute)
+			return;
+
 		MusicSource.Play();
 	}
 
@@ -83,6 +90,9 @@ public class AudioManager : MonoBehaviour
 
 	public static void PlaySFX(string name)
 	{
+		if (Instance.mute)
+			return;
+
 		if (!Instance.SFXDictionary.TryGetValue(name, out AudioClip clip))
 		{
 			Debug.Log($"Attempted to play SFX \"{name}\" but that SFX does not exist.");

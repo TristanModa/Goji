@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gojiTempLogo_0: -1895866967521932075
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

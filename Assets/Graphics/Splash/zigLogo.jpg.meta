@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      zigLogo_0: -4733664442228367333
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
