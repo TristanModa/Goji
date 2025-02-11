@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Goji.Gameplay
@@ -71,6 +72,7 @@ namespace Goji.Gameplay
 		private void Update()
 		{
 			// Update the desired movement direction
+			/* Debugging Input
 			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
 				DesiredMoveDirection = Vector2Int.up;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
@@ -79,12 +81,15 @@ namespace Goji.Gameplay
 				DesiredMoveDirection = Vector2Int.right;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
-
+			*/
+			DesiredMoveDirection = SnakeBotMovement();
 			// Ignore inputs that would cause the snake to go backwards
+			
 			if (DesiredMoveDirection == PreviousMoveDirection * -1)
 				DesiredMoveDirection = PreviousMoveDirection;
 
 			Fruit.position = Vector2.Lerp(Fruit.position, FruitPosition, 0.25f);
+			
 		}
 
 		private void FixedUpdate()
@@ -203,6 +208,34 @@ namespace Goji.Gameplay
 			}
 
 			return randomPosition;
+		}
+
+		private Vector2Int SnakeBotMovement() 
+		{
+			Vector2Int[] directions = { Vector2Int.down, Vector2Int.up, Vector2Int.left, Vector2Int.right };
+
+			Vector2Int bestMove = Vector2Int.zero;
+			float shortestDistance = float.MaxValue;
+
+			foreach (Vector2Int dir in directions) 
+			{
+				Vector2Int newPos = HeadPosition + dir;
+
+				if (SegmentPositions.Contains(newPos))
+					continue;
+
+				float distance = Vector2Int.Distance(newPos, FruitPosition);
+
+				if (distance < shortestDistance) 
+				{
+					shortestDistance = distance;
+					bestMove = dir;
+				}
+			
+			}
+
+
+			return bestMove;
 		}
 		#endregion
 	}
