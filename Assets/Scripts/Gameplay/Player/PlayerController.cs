@@ -45,16 +45,8 @@ namespace Goji.Gameplay.Player
 		/// <summary>
 		/// Whether the player is touching the ground this frame
 		/// </summary>
-		private bool IsGrounded 
-		{
-			get 
-			{
-				return Physics2D.OverlapBox(
-					transform.position + (Vector3)groundCheckOffset,
-					groundCheckSize,
-					0, groundLayer);
-			}
-		}
+		private bool IsGrounded { get; set; }
+
 		/// <summary>
 		/// Whether the player is currently approaching max speed
 		/// </summary>
@@ -93,6 +85,7 @@ namespace Goji.Gameplay.Player
 		#endregion
 
 		#region Events
+		public event Action OnPlayerHitGround;
 		public event Action OnPlayerJump;
 		#endregion
 
@@ -136,6 +129,8 @@ namespace Goji.Gameplay.Player
 		#endregion
 
 		#region Fields
+		private bool _wasGroundedLastFrame;
+
 		private int _jumpBufferStartFrame;
 		private int _coyoteTimeStartFrame;
 		#endregion
@@ -162,9 +157,32 @@ namespace Goji.Gameplay.Player
 			// Get player input for the frame
 			PlayerInput.UpdateButtonStates();
 
+			CheckCollision();
+
 			UpdateTimers();
 			UpdateVelocity();
 			PerformCornerAdjustments();
+
+			_wasGroundedLastFrame = IsGrounded;
+		}
+
+		/// <summary>
+		/// Updates states related to collision
+		/// </summary>
+		private void CheckCollision()
+		{
+			// Check if the player is grounded
+			IsGrounded = 
+				Physics2D.OverlapBox(
+					transform.position + (Vector3)groundCheckOffset,
+					groundCheckSize,
+					0, groundLayer);
+			
+			// Invoke the ground
+			if (IsGrounded && !_wasGroundedLastFrame)
+			{
+				OnPlayerHitGround?.Invoke();
+			}
 		}
 
 		/// <summary>
