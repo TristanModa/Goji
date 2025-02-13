@@ -182,6 +182,7 @@ namespace Goji.Gameplay.Player
 			if (IsGrounded && !_wasGroundedLastFrame)
 			{
 				OnPlayerHitGround?.Invoke();
+				AudioManager.PlaySFX("Land");
 			}
 		}
 
@@ -244,7 +245,7 @@ namespace Goji.Gameplay.Player
 			float verticalVelocity = Velocity.y;
 
 			// End the player's jump if it should end
-			if (IsJumping && (!PlayerInput.Jump.Held || Velocity.y <= 0))
+			if (IsJumping && (/*!PlayerInput.Jump.Held || */Velocity.y <= 0))
 				IsJumping = false;
 
 			// Apply gravity
@@ -255,6 +256,7 @@ namespace Goji.Gameplay.Player
 			{
 				IsJumping = true;
 				OnPlayerJump?.Invoke();
+				AudioManager.PlaySFX("Jump");
 				verticalVelocity = Mathf.Sqrt(2 * CurrentGravityScale * jumpHeight);
 			}
 			
