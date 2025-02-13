@@ -313,9 +313,41 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rVersion 0.0.1.1s2\nAdded particle system to the apple\nAdded music &
-    SFX\n\nVersion 0.0.1.0s1\r\nAdded start screen\r\nAdded version notes\r\nAdded
-    credits\nImplemented snake screen wrap\n\nPress escape to return to title"
+  m_text: 'Version 0.0.1.2s3
+
+    Added basic platformer controller
+
+    Added bot
+    controlled snake
+
+    Added smooth snake movement
+
+    Added player squash and
+    stretch
+
+
+    Version 0.0.1.1s2
+
+    Added particle system to the apple
+
+    Added
+    music & SFX
+
+
+    Version 0.0.1.0s1
+
+    Added start screen
+
+    Added version
+    notes
+
+    Added credits
+
+    Implemented snake screen wrap
+
+
+    Press escape
+    to return to title'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
