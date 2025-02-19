@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8321ecaf16cf7428aeadc047c7ef95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mute: 0
+  mute: 1
   musicClip: {fileID: 8300000, guid: eae6889809a688b4e9bb4b33d8b32237, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 4611929be4a9c6144a49c1bec3fe09e9, type: 3}
@@ -2024,7 +2024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a5d6de92be94e543b6c84021c05896f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 46, y: 26}
+  mapSize: {x: 47, y: 27}
   snake: {fileID: 958805994}
   gameOverText: {fileID: 858030104}
 --- !u!4 &1911862264
@@ -2242,7 +2242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upwardGravityScale: 40
-  downwardGravityScale: 40
+  downwardGravityScale: 80
   maxMovementSpeed: 8
   accelerationFrames: 5
   decelerationFrames: 2
@@ -2252,10 +2252,10 @@ MonoBehaviour:
     m_Bits: 64
   groundCheckOffset: {x: 0, y: -0.5}
   groundCheckSize: {x: 0.95, y: 0.2}
-  cornerNudgeCheckLength: 0
-  cornerNudgeCheckOffset: 0
-  jumpBufferFrames: 0
-  coyoteTimeFrames: 0
+  cornerNudgeCheckLength: 0.7
+  cornerNudgeCheckOffset: 0.5
+  jumpBufferFrames: 8
+  coyoteTimeFrames: 8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

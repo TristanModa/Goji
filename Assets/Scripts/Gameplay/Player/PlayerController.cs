@@ -19,7 +19,7 @@ namespace Goji.Gameplay.Player
 		/// <summary>
 		/// The current velocity of the player
 		/// </summary>
-		private Vector2 Velocity 
+		public Vector2 Velocity 
 		{
 			get => Rigidbody2D.linearVelocity;
 			set
@@ -184,6 +184,14 @@ namespace Goji.Gameplay.Player
 				OnPlayerHitGround?.Invoke();
 				AudioManager.PlaySFX("Land");
 			}
+
+			// Check if the player left the bounds of the screen and wrap them
+			if (Mathf.Abs(transform.position.x) > GameManager.Instance.MapBounds.xMax)
+			{
+				int sign = Math.Sign(transform.position.x);
+				float newXPos = transform.position.x - sign * GameManager.Instance.MapBounds.width;
+				transform.position = new Vector2(newXPos, transform.position.y);
+			}
 		}
 
 		/// <summary>
@@ -299,7 +307,7 @@ namespace Goji.Gameplay.Player
 			// Check if a correction is required
 			bool correctionRequired =
 				!ceilingCenterCheck && (ceilingLeftCheck ^ ceilingRightCheck) &&
-				Mathf.Sign(direction) != Mathf.Sign(Velocity.x);
+				(Math.Sign(direction) != Math.Sign(Velocity.x) || Math.Sign(Velocity.x) == 0);
 
 			// Return if the correction is unneeded
 			if (!correctionRequired)

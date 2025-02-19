@@ -131,7 +131,7 @@ namespace Goji.Gameplay
 				SnakeMovementTimer = 0;
 
 				// Determine next movement direction
-				DesiredMoveDirection = GetNextMovementDirection();
+				// DesiredMoveDirection = GetNextMovementDirection();
 			}
 
 			// Increment the snake movement timer
@@ -254,7 +254,17 @@ namespace Goji.Gameplay
 				if (SegmentPositions.Contains(newPos))
 					continue;
 
-				float distance = Vector2Int.Distance(newPos, FruitPosition);
+				// Calculate the distance to the fruit in toroidal space
+				float dx = Mathf.Abs(newPos.x - FruitPosition.x);
+				float dy = Mathf.Abs(newPos.y - FruitPosition.y);
+
+				if (dx > MapBounds.width * 0.5f)
+					dx = MapBounds.width - dx;
+
+				if (dy > MapBounds.height * 0.5f)
+					dy = MapBounds.height - dy;
+
+				float distance = Mathf.Sqrt(dx * dx + dy * dy);
 
 				if (distance < shortestDistance) 
 				{
