@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8321ecaf16cf7428aeadc047c7ef95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mute: 1
+  mute: 0
   musicClip: {fileID: 8300000, guid: eae6889809a688b4e9bb4b33d8b32237, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 4611929be4a9c6144a49c1bec3fe09e9, type: 3}
@@ -1605,6 +1605,7 @@ MonoBehaviour:
   snakeMoveRate: 20
   snakeBodySegmentPrefab: {fileID: 6240308656206738667, guid: deb0b55f40006ac4d9b0a76fcb54ca09, type: 3}
   fruitPrefab: {fileID: 942621649340418357, guid: 978a93090bcf6614bada0ac283ea5020, type: 3}
+  snakeArrowPrefab: {fileID: 4127080700956874969, guid: b07bac61400ee18469b84d7e07f23acc, type: 3}
 --- !u!66 &958805995
 CompositeCollider2D:
   m_ObjectHideFlags: 0

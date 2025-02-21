@@ -24,6 +24,7 @@ namespace Goji.Gameplay
 
 		private Transform FrontSmoothingSegment { get; set; }
 		private Transform BackSmoothingSegment { get; set; }
+		private Transform SnakeArrow { get; set; }
 
 		private RectInt MapBounds => GameManager.Instance.MapBounds;
 
@@ -44,6 +45,8 @@ namespace Goji.Gameplay
 		Transform snakeBodySegmentPrefab;
 		[SerializeField]
 		Transform fruitPrefab;
+		[SerializeField]
+		Transform snakeArrowPrefab;
 		#endregion
 
 		#region Methods
@@ -74,6 +77,11 @@ namespace Goji.Gameplay
 			BackSmoothingSegment.name = "Back Smoothing Segment";
 			BackSmoothingSegment.parent = this.transform;
 
+			// Create arrow indicator
+			SnakeArrow = Instantiate(snakeArrowPrefab);
+			SnakeArrow.name = "Snake Arrow";
+			SnakeArrow.parent = FrontSmoothingSegment.transform;
+
 			// Set the default movement direction
 			DesiredMoveDirection = Vector2Int.right;
 
@@ -86,15 +94,18 @@ namespace Goji.Gameplay
 
 		private void Update()
 		{
+			// Update the snake arrow
+			UpdateSnakeArrow();
+
 			// Update the desired movement direction
-			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
-				DesiredMoveDirection = Vector2Int.up;
-			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
-				DesiredMoveDirection = Vector2Int.down;
-			if (UnityEngine.Input.GetKeyDown(KeyCode.D))
-				DesiredMoveDirection = Vector2Int.right;
-			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
-				DesiredMoveDirection = Vector2Int.left;
+			//if (UnityEngine.Input.GetKeyDown(KeyCode.W))
+			//	DesiredMoveDirection = Vector2Int.up;
+			//if (UnityEngine.Input.GetKeyDown(KeyCode.S))
+			//	DesiredMoveDirection = Vector2Int.down;
+			//if (UnityEngine.Input.GetKeyDown(KeyCode.D))
+			//	DesiredMoveDirection = Vector2Int.right;
+			//if (UnityEngine.Input.GetKeyDown(KeyCode.A))
+			//	DesiredMoveDirection = Vector2Int.left;
 
 			// Update smoothing segment positions
 			FrontSmoothingSegment.position = 
@@ -272,6 +283,18 @@ namespace Goji.Gameplay
 			}
 
 			return bestMove;
+		}
+
+		private void UpdateSnakeArrow()
+		{
+			if (DesiredMoveDirection == Vector2Int.up)
+				SnakeArrow.rotation = Quaternion.Euler(0, 0, 0);
+			else if (DesiredMoveDirection == Vector2Int.right)
+				SnakeArrow.rotation = Quaternion.Euler(0, 0, 270);
+			else if (DesiredMoveDirection == Vector2Int.down)
+				SnakeArrow.rotation = Quaternion.Euler(0, 0, 180);
+			else
+				SnakeArrow.rotation = Quaternion.Euler(0, 0, 90);
 		}
 		#endregion
 	}
