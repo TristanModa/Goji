@@ -31,6 +31,10 @@ namespace Goji.Gameplay
 
 		private Transform Fruit { get; set; }
 		private Vector2Int FruitPosition { get; set; }
+
+		private Transform SnakeArrow { get; set; }
+
+		private Vector2 SnakeArrowPOS { get; set; }
 		#endregion
 
 		#region Fields
@@ -44,10 +48,12 @@ namespace Goji.Gameplay
 		Transform snakeBodySegmentPrefab;
 		[SerializeField]
 		Transform fruitPrefab;
-		#endregion
+        [SerializeField]
+		Transform snakeArrowPrefab;
+        #endregion
 
-		#region Methods
-		private void Start()
+        #region Methods
+        private void Start()
 		{
 			// Set the initial length of the snake
 			SnakeLength = defaultSnakeLength;
@@ -82,6 +88,10 @@ namespace Goji.Gameplay
 			Fruit.name = "Fruit";
 			FruitPosition = GetValidFruitLocation();
 			Fruit.position = (Vector3Int)FruitPosition;
+
+			//Initialize Snake Arrow
+			SnakeArrowPOS = SegmentPositions[0];
+			SnakeArrow = Instantiate(snakeArrowPrefab);
 		}
 
 		private void Update()
@@ -98,8 +108,17 @@ namespace Goji.Gameplay
 				DesiredMoveDirection = Vector2Int.left;
 			*/
 
-			// Update smoothing segment positions
-			FrontSmoothingSegment.position = 
+			//Update the snake arrow
+			MoveSnakeArrow();
+
+
+            //Determine the next move for the snake
+            DesiredMoveDirection = GetNextMovementDirection();
+
+
+
+            // Update smoothing segment positions
+            FrontSmoothingSegment.position = 
 				Vector2.MoveTowards(
 					FrontSmoothingSegment.position, 
 					HeadPosition + DesiredMoveDirection, 
@@ -140,6 +159,9 @@ namespace Goji.Gameplay
 
 		private void PerformMovement()
 		{
+			//Move the snake arrow
+			MoveSnakeArrow();
+
 			// Move the head of the snake
 			Vector2Int newHeadPosition = HeadPosition;
 			newHeadPosition += DesiredMoveDirection;
@@ -275,6 +297,33 @@ namespace Goji.Gameplay
 
 			return bestMove;
 		}
-		#endregion
-	}
+
+		private void MoveSnakeArrow()
+		{
+			if (DesiredMoveDirection == Vector2Int.up)
+			{
+				SnakeArrow.transform.eulerAngles = new Vector3(0f, 0f, 0f);
+			}
+			else if (DesiredMoveDirection == Vector2Int.right)
+			{
+				SnakeArrow.transform.eulerAngles = new Vector3(0f, 0f, 270f);
+			}
+			else if (DesiredMoveDirection == Vector2Int.left)
+			{
+				SnakeArrow.transform.eulerAngles = new Vector3(0f, 0f, 90f);
+			}
+			else if (DesiredMoveDirection == Vector2Int.down)
+			{
+				SnakeArrow.transform.eulerAngles = new Vector3(0f, 0f, 180f);
+			}
+			else
+			{
+				SnakeArrow.transform.eulerAngles = new Vector3(0f, 0f, 90f);
+			}
+		}
+    }
+
+
 }
+		#endregion
+	
