@@ -87,7 +87,6 @@ namespace Goji.Gameplay
 		private void Update()
 		{
 			// Update the desired movement direction
-			/* Debugging Input
 			if (UnityEngine.Input.GetKeyDown(KeyCode.W))
 				DesiredMoveDirection = Vector2Int.up;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.S))
@@ -96,7 +95,6 @@ namespace Goji.Gameplay
 				DesiredMoveDirection = Vector2Int.right;
 			if (UnityEngine.Input.GetKeyDown(KeyCode.A))
 				DesiredMoveDirection = Vector2Int.left;
-			*/
 
 			// Update smoothing segment positions
 			FrontSmoothingSegment.position = 
@@ -131,7 +129,7 @@ namespace Goji.Gameplay
 				SnakeMovementTimer = 0;
 
 				// Determine next movement direction
-				// DesiredMoveDirection = GetNextMovementDirection();
+				DesiredMoveDirection = GetNextMovementDirection();
 			}
 
 			// Increment the snake movement timer

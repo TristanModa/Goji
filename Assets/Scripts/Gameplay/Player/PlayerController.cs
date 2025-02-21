@@ -253,7 +253,7 @@ namespace Goji.Gameplay.Player
 			float verticalVelocity = Velocity.y;
 
 			// End the player's jump if it should end
-			if (IsJumping && (/*!PlayerInput.Jump.Held || */Velocity.y <= 0))
+			if (IsJumping && (!PlayerInput.Jump.Held || Velocity.y <= 0))
 				IsJumping = false;
 
 			// Apply gravity
