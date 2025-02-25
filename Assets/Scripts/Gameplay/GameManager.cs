@@ -1,3 +1,4 @@
+using Goji.Gameplay.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,6 +36,12 @@ namespace Goji.Gameplay
 		SnakeController snake;
 
 		[SerializeField]
+		PlayerController player;
+
+		[SerializeField]
+		GameObject winText;
+
+		[SerializeField]
 		GameObject gameOverText;
 		#endregion
 
@@ -46,16 +53,20 @@ namespace Goji.Gameplay
 
 		void Start()
 		{
+			winText.SetActive(false);
 			gameOverText.SetActive(false);
 		}
 
 		void Update()
 		{
-			if (snake.IsDead)
+			if (player.IsDead)
 				gameOverText.SetActive(true);
 
+			if (snake.IsDead)
+				winText.SetActive(true);
+
 			// Reload the scene if the player presses R
-			if (snake.IsDead && UnityEngine.Input.GetKeyDown(KeyCode.R))
+			if ((snake.IsDead || player.IsDead) && UnityEngine.Input.GetKeyDown(KeyCode.R))
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
 			if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))

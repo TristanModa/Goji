@@ -48,6 +48,11 @@ namespace Goji.Gameplay.Player
 		private bool IsGrounded { get; set; }
 
 		/// <summary>
+		/// Whether the player is dead
+		/// </summary>
+		public bool IsDead { get; private set; }
+
+		/// <summary>
 		/// Whether the player is currently approaching max speed
 		/// </summary>
 		private bool IsAccelerating 
@@ -154,6 +159,9 @@ namespace Goji.Gameplay.Player
 
 		private void FixedUpdate()
 		{
+			if (IsDead)
+				return;
+
 			// Get player input for the frame
 			PlayerInput.UpdateButtonStates();
 
@@ -192,6 +200,10 @@ namespace Goji.Gameplay.Player
 				float newXPos = transform.position.x - sign * GameManager.Instance.MapBounds.width;
 				transform.position = new Vector2(newXPos, transform.position.y);
 			}
+
+			// Check if the player touched the death planes
+			if (Mathf.Abs(transform.position.y) > GameManager.Instance.MapBounds.yMax - 1)
+				IsDead = true;
 		}
 
 		/// <summary>
