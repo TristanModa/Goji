@@ -160,7 +160,10 @@ namespace Goji.Gameplay.Player
 		private void FixedUpdate()
 		{
 			if (IsDead)
+			{
+				Velocity = new Vector2(0, 0);
 				return;
+			}
 
 			// Get player input for the frame
 			PlayerInput.UpdateButtonStates();
@@ -202,7 +205,7 @@ namespace Goji.Gameplay.Player
 			}
 
 			// Check if the player touched the death planes
-			if (Mathf.Abs(transform.position.y) > GameManager.Instance.MapBounds.yMax - 1)
+			if (Mathf.Abs(transform.position.y) > GameManager.Instance.MapBounds.yMax - 2.5f)
 				IsDead = true;
 		}
 
@@ -335,6 +338,12 @@ namespace Goji.Gameplay.Player
 
 			// Update the player's position
 			transform.position += distanceToMove * direction * Vector3.right;
+		}
+
+		private void OnCollisionEnter2D(Collision2D collision)
+		{
+			if (collision.collider.CompareTag("Danger"))
+				IsDead = true;
 		}
 
 		private void OnDrawGizmos()
