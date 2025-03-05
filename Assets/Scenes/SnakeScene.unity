@@ -2834,6 +2834,7 @@ MonoBehaviour:
   accelerationFrames: 5
   decelerationFrames: 2
   jumpHeight: 4
+  jumpCooldownFrames: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
