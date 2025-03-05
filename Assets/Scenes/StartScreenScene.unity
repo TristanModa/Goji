@@ -951,7 +951,7 @@ RectTransform:
   m_GameObject: {fileID: 757922315}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1.0000163}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1.0000163}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2045856829}
@@ -981,7 +981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GOJI
+  m_text: Snake & Mouse
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -1632,6 +1632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8321ecaf16cf7428aeadc047c7ef95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mute: 0
+  musicClip: {fileID: 0}
   sfxClips:
   - {fileID: 8300000, guid: 99cb953ff56625545a7cac0fe72ac556, type: 3}
   - {fileID: 8300000, guid: 4611929be4a9c6144a49c1bec3fe09e9, type: 3}

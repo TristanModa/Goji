@@ -315,52 +315,64 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Version 0.0.1.3s4
 
-    Improved platformer jumping
+    Added obstacles
 
-    Added player horizontal
-    screen wrap
+    Added platform
 
-    Updated snake pathing to allow for wrapping
+    Added
+    game over state
 
-    Added snake
-    directional indicator
+    Updated music
+
+
+    Version 0.0.1.3s4
+
+    Improved platformer
+    jumping
+
+    Added player horizontal screen wrap
+
+    Updated snake pathing to
+    allow for wrapping
+
+    Added snake directional indicator
 
 
     Version 0.0.1.2s3
 
-    Added basic platformer controller
-
     Added
-    bot controlled snake
+    basic platformer controller
 
-    Added smooth snake movement
+    Added bot controlled snake
 
-    Added player squash
-    and stretch
+    Added smooth
+    snake movement
+
+    Added player squash and stretch
 
 
     Version 0.0.1.1s2
 
-    Added particle system to the apple
-
     Added
-    music & SFX
+    particle system to the apple
+
+    Added music & SFX
 
 
     Version 0.0.1.0s1
 
-    Added start screen
+    Added
+    start screen
 
-    Added version
-    notes
+    Added version notes
 
     Added credits
 
-    Implemented snake screen wrap
+    Implemented snake
+    screen wrap
 
 
-    Press escape
-    to return to title'
+    Press escape to return to title'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

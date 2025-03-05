@@ -87,6 +87,8 @@ namespace Goji.Gameplay.Player
 		/// Whether the player can jump while airborne
 		/// </summary>
 		private bool CoyoteTimeActive => _coyoteTimeStartFrame + coyoteTimeFrames >= FrameCount;
+
+		private bool JumpOnCooldown => FrameCount <= _lastJumpTime + jumpCooldownFrames;
 		#endregion
 
 		#region Events
@@ -111,6 +113,8 @@ namespace Goji.Gameplay.Player
 
 		[Space(20), SerializeField]
 		private float jumpHeight;
+		[SerializeField]
+		private float jumpCooldownFrames;
 
 		[Header("Collision")]
 		[SerializeField]
@@ -138,6 +142,7 @@ namespace Goji.Gameplay.Player
 
 		private int _jumpBufferStartFrame;
 		private int _coyoteTimeStartFrame;
+		private int _lastJumpTime;
 		#endregion
 
 		#region Methods
@@ -146,6 +151,7 @@ namespace Goji.Gameplay.Player
 			// Set initial timer values
 			_jumpBufferStartFrame = int.MinValue;
 			_coyoteTimeStartFrame = int.MinValue;
+			_lastJumpTime = int.MinValue;
 
 			// Get the player's rigidbody
 			Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -268,7 +274,7 @@ namespace Goji.Gameplay.Player
 			float verticalVelocity = Velocity.y;
 
 			// End the player's jump if it should end
-			if (IsJumping && (!PlayerInput.Jump.Held || Velocity.y <= 0))
+			if (IsJumping && (!PlayerInput.Jump.Held || Velocity.y <= 0) && !JumpOnCooldown)
 				IsJumping = false;
 
 			// Apply gravity
@@ -281,6 +287,7 @@ namespace Goji.Gameplay.Player
 				OnPlayerJump?.Invoke();
 				AudioManager.PlaySFX("Jump");
 				verticalVelocity = Mathf.Sqrt(2 * CurrentGravityScale * jumpHeight);
+				_lastJumpTime = FrameCount;
 			}
 			
 			// Return the result
